@@ -1,0 +1,33 @@
+{
+  "name": "copyist",
+  "version": "1.0.0",
+  "description": "Translates key=value strings to a Javascript object. Mostly designed to work with files containing copies, so it supports key duplication (think of multiple paragraphs) and multiline values.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine-node --coffee --verbose spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sr-cafe/copyist.git"
+  },
+  "keywords": [
+    "javascript",
+    "nodejs",
+    "object",
+    "properties",
+    "key/value"
+  ],
+  "author": "Jose Rubio <jose.rubio@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sr-cafe/copyist/issues"
+  },
+  "homepage": "https://github.com/sr-cafe/copyist",
+  "devDependencies": {
+    "jasmine-expect": "^1.22.2",
+    "jasmine-node": "^1.14.5"
+  },
+  "dependencies": {
+    "coffee-script": "^1.8.0"
+  }
+}

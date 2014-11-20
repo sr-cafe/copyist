@@ -4,7 +4,8 @@
   "description": "Translates key=value strings to a Javascript object. Mostly designed to work with files containing copies, so it supports key duplication (think of multiple paragraphs) and multiline values.",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine-node --coffee --verbose spec"
+    "test": "jasmine-node --coffee --verbose spec",
+    "doc": "yuidoc ./lib"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,8 @@
   "homepage": "https://github.com/sr-cafe/copyist",
   "devDependencies": {
     "jasmine-expect": "^1.22.2",
-    "jasmine-node": "^1.14.5"
+    "jasmine-node": "^1.14.5",
+    "yuidocjs": "^0.4.0"
   },
   "dependencies": {
     "coffee-script": "^1.8.0"

@@ -1,0 +1,11 @@
+{
+	"name": "Copyist",
+	"description": "A module to turn copies files into Javascript objects.",
+	"version": "1.0.0",
+	"options": {
+		"linkNatives": "true",
+		"outdir": "./doc",
+		"syntaxtype": "coffee",
+		"extension": ".coffee"
+	}
+}

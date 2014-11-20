@@ -12,7 +12,7 @@ commentLineMatcher = /^#/
 # A section header:
 #	-starts with [
 #	-ends with ]
-# 	-between those 2 symbols it can contain just a valid javascript object key, although it can be surrounded by whitespace
+# 	-between those 2 symbols it must contain just a valid javascript object key, although it can be surrounded by whitespace
 # [HEADER] => it's a header
 # [ HEADER ] => it's a header
 # [ HEADER_NAME ] => it's a header
@@ -21,15 +21,20 @@ commentLineMatcher = /^#/
 sectionHeaderMatcher = /^\[(\s*[a-zA-Z_][a-zA-Z0-9._]*\s*)\]$/i;
 
 # A key=value line:
-#	-starts with any combination of characters than doesn't contain any whitespace
+#	-starts with a valid javascript key
 #	-continues with a =
 #	-ends with any combination of characters
 # key=value => it's a key/value line
 # key = value => it's a key/value line
 # key.subkey = value => it's a key/value line
 # key = value includes a second = but and it's fine => it's a key/value line
+# 1key=value => it's NOT a key/value line
 # key subkey = value => it's NOT a key/value line
-keyValueMatcher = /^(\S*\s*\=.*)$/i
+keyValueMatcher = /^([a-zA-Z_][a-zA-Z0-9._]*\s*\=.*)$/i
+
+keyMatcher = /^([a-zA-Z_][a-zA-Z0-9._]*\s*)\=/i
+
+valueMatcher = /^[a-zA-Z_][a-zA-Z0-9._]*\s*\=(.*)$/i
 
 module.exports =
 	splitOnNewLine: (text) ->
@@ -52,3 +57,15 @@ module.exports =
 
 	isKeyValue: (text) ->
 		return keyValueMatcher.test text.trim()
+
+	getKey: (text) ->
+		if not @isKeyValue text
+			return null
+		else
+			return text.trim().match(keyMatcher)[1].trim()
+
+	getValue: (text) ->
+		if not @isKeyValue text
+			return null
+		else
+			return text.trim().match(valueMatcher)[1].trim()

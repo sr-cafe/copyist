@@ -9,7 +9,10 @@ describe 'Matchers smoke test', ->
 			'isEmpty'
 			'isComment'
 			'isSectionHeader'
+			'getSectionHeader'
 			'isKeyValue'
+			'getKey'
+			'getValue'
 		].forEach (fn) ->
 			expect(matchers[fn]).toBeFunction()
 
@@ -43,7 +46,7 @@ describe 'Matchers API', ->
 	it 'isComment returns false for non-comment strings', ->
 		[
 			'Not a comment'
-			'Also not a #coment'
+			'Also not a #comment'
 			'[#Neither I am]'
 		].forEach (text) ->
 			test = matchers.isComment text
@@ -104,11 +107,12 @@ describe 'Matchers API', ->
 			'	[header'
 			'#[header ]'
 			'[header section]'
+			'[1header]'
 		].forEach (text) ->
 			test = matchers.getSectionHeader text
 			expect(test).toBeNull()
 
-	it 'isKeyValue returns true for key=value strings', ->
+	it 'isKeyValue returns true for key/value strings', ->
 		[
 			'key=value'
 			'	key = value'
@@ -116,19 +120,91 @@ describe 'Matchers API', ->
 			'  key    = a value with an additional = inside...'
 			'key.subkey = a nested key'
 			'key.subkey.grand_subkey = value'
-			'key.with.empty.value ='
+			'key.subkey.and.a.very.long.list.of.nested.subkeys=value'
+			'key.with.empty.value='
+			'_key=value'
 		].forEach (text) ->
 			test = matchers.isKeyValue text
 			expect(test).toBeTrue()
 
-	it 'isKeyValue returns false for non-section header strings', ->
+	it 'isKeyValue returns false for non-key/value strings', ->
 		[
-			'header'
-			'#comment'
-			'header]'
-			'	[header'
-			'#[header ]'
-			'[header section]'
+			'key'
+			'1key=value'
+			'.key=value'
+			'key subkey = value'
+			'key.sub-key=value'
+			'$key=value'
 		].forEach (text) ->
-			test = matchers.isSectionHeader text
+			test = matchers.isKeyValue text
 			expect(test).toBeFalse()
+
+	it 'getKey returns the key of a key/value string', ->
+		[
+			'key=value'
+			'	key = value'
+			'key = value with another = for testing purposes'
+		].forEach (text) ->
+			test = matchers.getKey text
+			expect(test).toEqual 'key'
+
+		[
+			'key.subkey=value'
+			'	key.subkey = value with another = for testing purposes and a key.subkey also inside...'
+		].forEach (text) ->
+			test = matchers.getKey text
+			expect(test).toEqual 'key.subkey'
+
+		[
+			'key.subkey.and.a.very.long.list.of.nested.subkeys=value'
+		].forEach (text) ->
+			test = matchers.getKey text
+			expect(test).toEqual 'key.subkey.and.a.very.long.list.of.nested.subkeys'
+
+	it 'getKey returns null when feeded a non-key/value string', ->
+		[
+			'key'
+			'1key=value'
+			'.key=value'
+			'key subkey = value'
+			'key.sub-key=value'
+			'$key=value'
+		].forEach (text) ->
+			test = matchers.getKey text
+			expect(test).toBeNull()
+
+	it 'getValue returns the value of a key/value string', ->
+		[
+			'key=value of the line'
+			'	key = value of the line'
+			'key = value of the line'
+			'key.subkey = value of the line'
+		].forEach (text) ->
+			test = matchers.getValue text
+			expect(test).toEqual 'value of the line'
+
+		[
+			'key=value with another = for testing purposes and a key.subkey also inside...'
+			'	key.subkey = 		value with another = for testing purposes and a key.subkey also inside...'
+		].forEach (text) ->
+			test = matchers.getValue text
+			expect(test).toEqual 'value with another = for testing purposes and a key.subkey also inside...'
+
+		[
+			'key='
+			'key=       '
+		].forEach (text) ->
+			test = matchers.getValue text
+			expect(test).toEqual ''
+
+	it 'getValue returns null when feeded a non-key/value string', ->
+		[
+			'key'
+			'1key=value'
+			'.key=value'
+			'key subkey = value'
+			'key.sub-key=value'
+			'$key=value'
+		].forEach (text) ->
+			test = matchers.getValue text
+			expect(test).toBeNull()

@@ -8,6 +8,7 @@ describe 'Matchers smoke test', ->
 			'splitOnNewLine'
 			'isEmpty'
 			'isComment'
+			'getComment'
 			'isSectionHeader'
 			'getSectionHeader'
 			'isKeyValue'

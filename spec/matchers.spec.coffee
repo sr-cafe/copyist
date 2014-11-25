@@ -9,6 +9,8 @@ describe 'Matchers smoke test', ->
 			'isEmpty'
 			'isComment'
 			'getComment'
+			'isCommand'
+			'getCommand'
 			'isSectionHeader'
 			'getSectionHeader'
 			'isKeyValue'
@@ -17,7 +19,7 @@ describe 'Matchers smoke test', ->
 		].forEach (fn) ->
 			expect(matchers[fn]).toBeFunction()
 
-describe 'Matchers API', ->
+describe 'Empty matchers', ->
 	it 'splits text in new lines characters', ->
 		test = 'First line.\nSecond line.'
 
@@ -34,6 +36,7 @@ describe 'Matchers API', ->
 		test = matchers.isEmpty '   a  '
 		expect(test).toBeFalse()
 
+describe 'Comment matchers', ->
 	it 'isComment returns true for comment strings', ->
 		[
 			'# I am a comment'
@@ -53,6 +56,55 @@ describe 'Matchers API', ->
 			test = matchers.isComment text
 			expect(test).toBeFalse()
 
+describe 'Command matchers', ->
+	it 'isCommand returns true for command strings', ->
+		[
+			'!# I am a command'
+			'  !# Me too'
+			'		!#And so I am'
+			'!#[Me !#too]'
+		].forEach (text) ->
+			test = matchers.isCommand text
+			expect(test).toBeTrue()
+
+	it 'isCommand returns false for non-command strings', ->
+		[
+			'!Not a command'
+			'Also not a !#command'
+			'[!#Neither I am]'
+			'! # Nor me'
+		].forEach (text) ->
+			test = matchers.isCommand text
+			expect(test).toBeFalse()
+
+	it 'getCommand returns the value after !# in a command string', ->
+		[
+			'!#Command goes here'
+			'!#       Command goes here'
+			'		!#Command goes here'
+		].forEach (text) ->
+			test = matchers.getCommand text
+			expect(test).toEqual 'Command goes here'
+
+		[
+			'!#Command !#goes here'
+			'!#		Command !#goes here'
+		].forEach (text) ->
+			test = matchers.getCommand text
+			expect(test).toEqual 'Command !#goes here'
+
+	it 'getCommand returns null when feeded a non-command string', ->
+		[
+			'command'
+			'#comment'
+			'! # not a command'
+			'a regular line'
+			'a line with !# fake command'
+		].forEach (text) ->
+			test = matchers.getCommand text
+			expect(test).toBeNull()
+
+describe 'Section header matchers', ->
 	it 'isSectionHeader returns true for section header strings', ->
 		[
 			'[header]'
@@ -113,6 +165,7 @@ describe 'Matchers API', ->
 			test = matchers.getSectionHeader text
 			expect(test).toBeNull()
 
+describe 'Key=value matchers', ->
 	it 'isKeyValue returns true for key/value strings', ->
 		[
 			'key=value'

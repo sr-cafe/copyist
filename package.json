@@ -4,8 +4,8 @@
   "description": "Translates key=value strings to a Javascript object. Mostly designed to work with files containing copies, so it supports key duplication (think of multiple paragraphs) and multiline values.",
   "main": "index.js",
   "scripts": {
-  	"lint": "coffeelint lib/matchers.coffee",
-    "test": "coffeelint lib/matchers.coffee && jasmine-node --coffee --verbose spec",
+    "lint": "coffeelint ./lib/*.coffee",
+    "test": "npm run lint && jasmine-node --coffee --verbose spec",
     "doc": "yuidoc ./lib"
   },
   "repository": {

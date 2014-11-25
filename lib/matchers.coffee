@@ -191,7 +191,7 @@ class Matcher
 	# a comment.
 	###
 	@getComment = (text) ->
-		if not @isComment text
+		if not Matcher.isComment text
 			return null
 		else
 			return text.trim().match(commentExtractor)[1].trim()
@@ -217,7 +217,7 @@ class Matcher
 	# a command.
 	###
 	@getCommand = (text) ->
-		if not @isCommand text
+		if not Matcher.isCommand text
 			return null
 		else
 			return text.trim().match(commandExtractor)[1].trim()
@@ -243,7 +243,7 @@ class Matcher
 	# a section header.
 	###
 	@getSectionHeader = (text) ->
-		if not @isSectionHeader text
+		if not Matcher.isSectionHeader text
 			return null
 		else
 			return text.trim().match(sectionHeaderMatcher)[1].trim()
@@ -269,7 +269,7 @@ class Matcher
 	# a key=value string.
 	###
 	@getKey = (text) ->
-		if not @isKeyValue text
+		if not Matcher.isKeyValue text
 			return null
 		else
 			return text.trim().match(keyExtractor)[1].trim()
@@ -284,7 +284,7 @@ class Matcher
 	# a key=value string.
 	###
 	@getValue = (text) ->
-		if not @isKeyValue text
+		if not Matcher.isKeyValue text
 			return null
 		else
 			return text.trim().match(valueExtractor)[1].trim()

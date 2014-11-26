@@ -60,7 +60,7 @@ The default behaviour is to turn the last duplicated key into an array, so we wi
 			name:['A', 'B']
 		}
 	}
-``
+```
 
 For the most part of the documents Copyist is designed for this is the correct behaviour. But in the future, a new "Commands" feature will be introduced that will allow to disambiguate those cases:
 ```javascript
@@ -79,7 +79,7 @@ This instruction tells Copyist to turn the "item" key into an array, so the resu
 			}
 		]
 	}
-```
+``
 
 Usage
 -----

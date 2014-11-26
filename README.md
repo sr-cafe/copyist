@@ -25,19 +25,21 @@ A document like this (notice the use of non-consistent whitespace):
 	Maecenas id aliquet lorem. Curabitur luctus ipsum cursus massa luctus vestibulum.
 
 will translate in an object like this:
-	{
-		meta: {
-			title: 'Title of the site',
-			description: 'Description of the site'
-		},
-		home:{
-			title: 'Title of the homepage',
-			paragraph: [
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas non mi dictum, tincidunt diam in, malesuada ligula.',
-				'Maecenas in vehicula mi, non elementum lectus.<br />Maecenas mollis lorem neque.<br /><br />Maecenas id aliquet lorem. Curabitur luctus ipsum cursus massa luctus vestibulum.'
-			]
-		}
+```javascript
+{
+	meta: {
+		title: 'Title of the site',
+		description: 'Description of the site'
+	},
+	home:{
+		title: 'Title of the homepage',
+		paragraph: [
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas non mi dictum, tincidunt diam in, malesuada ligula.',
+			'Maecenas in vehicula mi, non elementum lectus.<br />Maecenas mollis lorem neque.<br /><br />Maecenas id aliquet lorem. Curabitur luctus ipsum cursus massa luctus vestibulum.'
+		]
 	}
+}
+```
 
 There are a couple of things to notice in the resulting home.paragraph:
 * The duplicated key has been turned into an array.
@@ -45,21 +47,28 @@ There are a couple of things to notice in the resulting home.paragraph:
 
 There is one caveat in the duplicated keys to array conversion. Since the document format is flat (no nested elements), it can lead to some ambiguous situations.
 Consider a document like this:
+```javascript
 	item.name=A
 	item.name=B
+```
 
 It's not clear to distinguish if we have 1 item with 2 names or 2 items each one having 1 name.
 The default behaviour is to turn the last duplicated key into an array, so we will finish with an object like this:
+```javascript
 	{
 		item:{
 			name:['A', 'B']
 		}
 	}
+``
 
 For the most part of the documents Copyist is designed for this is the correct behaviour. But in the future, a new "Commands" feature will be introduced that will allow to disambiguate those cases:
+```javascript
 	!# [] :: item
+```
 
 This instruction tells Copyist to turn the "item" key into an array, so the resulting object will be like this:
+```javascript
 	{
 		item: [
 			{
@@ -70,6 +79,7 @@ This instruction tells Copyist to turn the "item" key into an array, so the resu
 			}
 		]
 	}
+```
 
 Usage
 -----

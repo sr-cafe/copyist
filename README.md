@@ -79,7 +79,7 @@ This instruction tells Copyist to turn the "item" key into an array, so the resu
 			}
 		]
 	}
-``
+```
 
 Usage
 -----

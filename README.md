@@ -105,7 +105,7 @@ $ npm test
 
 To do
 -----
-* Implement line breaks on text.
-* Implement line breaks encoding.
+* Search for a deep copy merge alternative.
+* Implement header sections.
 * Define Command interface.
 * Implement key to array Command.

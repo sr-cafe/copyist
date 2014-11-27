@@ -1,16 +1,12 @@
 matchers = require './matchers'
 Line = require './line'
 
-###*
-# Class type for strings that contain data in key=value format.
-#
-# @class KeyValue
-# @extends Line
-###
 class KeyValue extends Line
-
 	###*
-	# Constructor.
+	# Class type for strings that contain data in key=value format.
+	#
+	# @class KeyValue
+	# @extends Line
 	#
 	# @constructor
 	# @param {String} text String to parse.
@@ -58,5 +54,32 @@ class KeyValue extends Line
 	###
 	getContentExtractor: ->
 		return matchers.getValue
+
+	###*
+	# Getter for the value property: the content of the string with
+	# string type markers removed.
+	# If content spawned between multiple lines, it will return a string
+	# with all lines joined by the specified line break replacement.
+	#
+	# @method value
+	# @return {String} String with string type markers removed.
+	###
+	value: ->
+		values = @lines.map (line) ->
+			return line.value()
+
+		return [@_data.value].concat(values).join(@lineBreakReplacement)
+
+	###*
+	# Merges new lines with the original content.
+	#
+	# @method consolidateMultiline
+	###
+	consolidateMultiline: ->
+		index = @lines.length - 1
+
+		while @lines.length > 0 and @lines[index].getType() is 'Empty'
+			@lines.pop()
+			index--
 
 module.exports = KeyValue

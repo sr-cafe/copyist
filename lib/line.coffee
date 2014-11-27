@@ -1,42 +1,22 @@
-###*
-# Base class for text lines.
-#
-# A Line transforms a string into a data structure
-# which contains at least:
-#
-# - lineNumber: Position of the string in the document.
-#
-# - value: Content of the string with string type markers removed.
-# A string type marker is a combination of characters that define which
-# type of string they are on. For instance, "#" at the beginning of the
-# string marks it as a comment.
-#
-# - raw: The original content of the line.
-#
-# Line acts as an abstract class, so it cannot be instantiated directly.
-# @class Line
-###
-
 class Line
 	###*
-	# Default error message for methods not overriden.
+	# Base class for text lines.
 	#
-	# @private
-	###
-	METHOD_NOT_OVERRIDEN = 'Method {m} must be overriden in subclass'
-
-	###*
-	# Returns a string with the method who caused the error interpolated.
+	# A Line transforms a string into a data structure
+	# which contains at least:
 	#
-	# @private
-	# @param {String} methodName Name of the method not overriden.
-	###
-	getOverrideError = (methodName) ->
-		return METHOD_NOT_OVERRIDEN.replace '{m}', methodName
-
-	###*
-	# Constructor.
+	# - lineNumber: Position of the string in the document.
 	#
+	# - value: Content of the string with string type markers removed.
+	# A string type marker is a combination of characters that define which
+	# type of string they are on. For instance, "#" at the beginning of the
+	# string marks it as a comment.
+	#
+	# - raw: The original content of the line.
+	#
+	# Line acts as an abstract class, so it cannot be instantiated directly.
+	#
+	# @class Line
 	# @constructor
 	# @param {String} text String to parse.
 	# @param {Number} lineNumber Position of the string in the document.
@@ -53,6 +33,9 @@ class Line
 			lineNumber: lineNumber
 			raw: text
 			value: @parse text
+
+		@lines = []
+		@lineBreakReplacement = '<br />'
 
 	###*
 	# Checks if the text provided conforms to the string type.
@@ -74,8 +57,26 @@ class Line
 	parse: (text) ->
 		return @getContentExtractor() text
 
+	###*
+	# Adds a new line to the content.
+	#
+	# @method addLine
+	# @param {Line} Line to be added
+	###
+	addLine: (line)->
+		@lines.push line
+
+	###*
+	# Especifies how to replace line breaks.
+	#
+	# @method newline
+	# @param {String} lineBreakReplacement Characters used to mark line breaks.
+	###
+	newline: (@lineBreakReplacement)->
+
+
 	#######################################################################
-		GETTERS
+	#	GETTERS
 	#######################################################################
 	###*
 	# Getter for the line number property.
@@ -115,7 +116,7 @@ class Line
 		return @_data
 
 	#######################################################################
-		METHODS TO OVERRIDE
+	#	METHODS TO OVERRIDE
 	#######################################################################
 	###*
 	# This method must be overriden.
@@ -153,5 +154,25 @@ class Line
 	getContentExtractor: ->
 		throw new Error getOverrideError 'getContentExtractor'
 
+	#######################################################################
+	#	PRIVATE UTILITY METHODS
+	#######################################################################
+
+	###*
+	# Default error message for methods not overriden.
+	# @property
+	# @private
+	###
+	METHOD_NOT_OVERRIDEN = 'Method {m} must be overriden in subclass'
+
+	###*
+	# Returns a string with the method who caused the error interpolated.
+	#
+	# @method
+	# @private
+	# @param {String} methodName Name of the method not overriden.
+	###
+	getOverrideError = (methodName) ->
+		return METHOD_NOT_OVERRIDEN.replace '{m}', methodName
 
 module.exports = Line

@@ -2,20 +2,21 @@ matchers = require './matchers'
 Line = require './line'
 
 ###*
-# Class type for strings that contain white space only.
+# Class type for strings that are just text from multiline content.
 #
-# @class Empty
+# @class Plain
 # @extends Line
 ###
-class Comment extends Line
+
+class PlainLine extends Line
 	###*
-	# Returns a string identifying the type of the class: Empty
+	# Returns a string identifying the type of the class: Plain
 	#
 	# @method getType
 	# @return {String} The type of the class.
 	###
 	getType: ->
-		return 'Empty'
+		return 'Plain'
 
 	###*
 	# Returns a Function that matches the string type markers of this type.
@@ -25,16 +26,18 @@ class Comment extends Line
 	# 					 conforms to type.
 	###
 	getTypeMatcher: ->
-		return matchers.isEmpty
+		return ->
+			return true
 
 	###*
-	# Returns a Function that returns the original string (an empty string).
+	# Returns a Function that returns the original string.
 	#
 	# @method getContentExtractor
 	# @return {Function} Function to be executed to get the original string.
 	###
 	getContentExtractor: ->
-		return ->
-			return ''
+		return (text) ->
+			return text.trim()
 
-module.exports = Comment
+
+module.exports = PlainLine
